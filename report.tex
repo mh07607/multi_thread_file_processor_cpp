@@ -1,0 +1,75 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{geometry}
+\usepackage{graphicx}
+
+\geometry{margin=1in}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+
+\lstset{style=mystyle}
+
+\title{Multithreaded File Processor Report}
+\author{Muhammad Arsalan Hussain}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section*{Introduction}
+This report discusses the implementation of a dynamic data structures in the provided C code, as well as the performance difference between single threaded and multithreaded programs.
+
+\section*{Dynamic Data Structure}
+The data structure used to store the input data is a dynamically allocated integer array. The array is initially set to \texttt{NULL}, and memory is allocated dynamically using \texttt{realloc} as new elements are read from the input file. This allows the data structure to adapt to the number of elements in the file without the need for a fixed-size array.
+
+\section*{Threaded Computations}
+The program employs multiple threads to concurrently compute the sum, minimum, and maximum values of the data. Each thread is responsible for a specific range of elements in the array. The dynamic allocation of thread-specific data parameters ensures that each thread operates on a distinct portion of the array.
+
+\section*{Mutex Usage}
+It's worth noting that mutex locks are used sparingly, only where necessary to maintain data integrity. In this case, the critical sections are small and infrequent, minimizing the impact on performance.
+
+\section*{Performance metrics}
+Time is measured in seconds for all computations. Values might be different during runtime as these are averaged values. Data Large was not properly tested due to hardware limitations. My machine only supported uptil 4 threads so higher threads only made the performance worse hence it wasn't tested. But within 4 threads, the performance is far better as we can see in the table.
+\begin{table}[ht]
+    \centering
+    \caption{Time comparison}
+    \begin{tabular}{|c|c|c|c|}
+        \hline
+        \textbf{Number of threads} & \textbf{Data tiny} & \textbf{Data small} & \textbf{Data medium} \\
+        \hline
+        \textbf{1} & 0s & 0.49s & 1s\\
+        \hline
+        \textbf{2} & 0s & 0.49s & 1s\\
+        \hline
+        \textbf{4} & 0s & 0.49s & 1s\\
+        \hline
+        \textbf{8} & 0s & 0.49s & 1s\\
+        \hline
+        
+    \end{tabular}
+\end{table}
+\end{document}
